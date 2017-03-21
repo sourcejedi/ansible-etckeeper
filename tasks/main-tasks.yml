@@ -1,0 +1,90 @@
+# Ubuntu changed the default to bzr instead of git, sigh.
+# Before running this on Ubuntu, I would want to revert that default
+# (see etckeeper README "This choice [git] has been carefully made").
+- name: Supported OS - Debian or Fedora
+  assert:
+    that: ansible_distribution in ["Debian", "Fedora"]
+
+- name: Install etckeeper
+  package:
+    name: etckeeper
+    state: present
+
+
+# 1/2 Run command task conditionally, to provide accurate "changed" status
+- name: ensure | etckeeper repo is created
+  command: etckeeper init
+  args:
+    creates: /etc/.etckeeper
+
+# 2/2 The condition must now hold.  This "fixes" ansible check mode.
+- name: check  | etckeeper repo is created
+  command: test -f /etc/.etckeeper
+  changed_when: False
+  always_run: True
+
+
+# This is necessary when automating commits to etckeeper.
+# I guess it's required specifically when stdin is not a tty.
+#
+# 1/3 Query condition
+- name: query  | git user.email is set, at least for this repo
+  command: git config --get user.email
+  args:
+    chdir: /etc
+  register: git_user_email
+  failed_when: False
+  changed_when: False
+  always_run: True
+
+# 2/3 Run command task conditionally, to provide accurate "changed" status
+- name: ensure | git user.email is set, at least for this repo
+  command: "git config --local user.email root@{{ ansible_hostname }}"
+  args:
+    chdir: /etc
+  when: git_user_email.rc != 0
+
+# 3/3 The condition must now hold.  This "fixes" ansible check mode.
+- name: check  | git user.email is set, at least for this repo
+  # I think it's required specifically when stdin is not a tty
+  command: git config --get user.email
+  args:
+    chdir: /etc
+  register: git_user_email
+  changed_when: False
+  always_run: True
+
+
+# Save the original contents of /etc.
+# Same idea that justifies etckeeper automatic commits after package install.
+#
+# After this first commit, I don't care about integration with ansible.
+# There's no way to run after the play is complete, even if we wanted to.
+# Don't force a pre-commit either.  User can always untangle changes, but
+# once it's committed, it could be a bad idea to try moving back
+# in the history in /etc.
+#
+# 1/3 Query condition
+- name: query  | etckeeper has initial commit
+  command: git rev-parse HEAD
+  args:
+    chdir: /etc
+    warn: no  # can't use git module, it doesn't do anything like this
+  register: etckeeper_has_commit
+  failed_when: False
+  changed_when: False
+  always_run: True
+
+# 2/3 Run command task conditionally, to provide accurate "changed" status
+- name: ensure | etckeeper has initial commit
+  command: etckeeper commit 'Initial commit (by ansible role)'
+  when: etckeeper_has_commit.rc != 0
+
+# 3/3 The condition must now hold.  This "fixes" ansible check mode.
+- name: check  | etckeeper has initial commit
+  command: git rev-parse HEAD
+  args:
+    chdir: /etc
+    warn: no  # can't use git module, it doesn't do anything like this
+  changed_when: False
+  always_run: True
