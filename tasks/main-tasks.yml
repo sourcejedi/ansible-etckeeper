@@ -24,14 +24,16 @@
   always_run: True
 
 
-# This is necessary when automating commits to etckeeper.
-# I guess it's required specifically when stdin is not a tty.
+# This appeared necessary during initial testing with fedora-25 on nspawn.
+# I think it was required specifically when committing from ansible.
+# It does not seem to be required on debian8-vm though.
 #
 # 1/3 Query condition
 - name: query  | git user.email is set, at least for this repo
+  environment:
+    GIT_DIR: /etc/.git
   command: git config --get user.email
   args:
-    chdir: /etc
   register: git_user_email
   failed_when: False
   changed_when: False
@@ -39,17 +41,16 @@
 
 # 2/3 Run command task conditionally, to provide accurate "changed" status
 - name: ensure | git user.email is set, at least for this repo
+  environment:
+    GIT_DIR: /etc/.git
   command: "git config --local user.email root@{{ ansible_hostname }}"
-  args:
-    chdir: /etc
   when: git_user_email.rc != 0
 
 # 3/3 The condition must now hold.  This "fixes" ansible check mode.
 - name: check  | git user.email is set, at least for this repo
-  # I think it's required specifically when stdin is not a tty
+  environment:
+    GIT_DIR: /etc/.git
   command: git config --get user.email
-  args:
-    chdir: /etc
   register: git_user_email
   changed_when: False
   always_run: True
@@ -66,9 +67,10 @@
 #
 # 1/3 Query condition
 - name: query  | etckeeper has initial commit
+  environment:
+    GIT_DIR: /etc/.git
   command: git rev-parse HEAD
   args:
-    chdir: /etc
     warn: no  # can't use git module, it doesn't do anything like this
   register: etckeeper_has_commit
   failed_when: False
@@ -82,9 +84,10 @@
 
 # 3/3 The condition must now hold.  This "fixes" ansible check mode.
 - name: check  | etckeeper has initial commit
+  environment:
+    GIT_DIR: /etc/.git
   command: git rev-parse HEAD
   args:
-    chdir: /etc
     warn: no  # can't use git module, it doesn't do anything like this
   changed_when: False
   always_run: True
