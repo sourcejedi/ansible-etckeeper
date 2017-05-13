@@ -5,6 +5,10 @@
   assert:
     that: ansible_distribution in ["Debian", "Fedora"]
 
+# On debian, installing the etckeeper package seems to put /etc under version control
+# immediately.
+# Other distributions have a different philosophy though.
+# (Does this mean Ubuntu immediately creates a bzr repo??)
 - name: Install etckeeper
   package:
     name: etckeeper
@@ -24,8 +28,10 @@
   always_run: True
 
 
+# Avoid constant messages about setting user.email.
+#
 # This appeared necessary during initial testing with fedora-25 on nspawn.
-# I think it was required specifically when committing from ansible.
+# I think it was required to avoid failures when committing from ansible.
 # It does not seem to be required on debian8-vm though.
 #
 # 1/3 Query condition
