@@ -1,10 +1,3 @@
-# Ubuntu changed the default to bzr instead of git, sigh.
-# Before running this on Ubuntu, I would want to revert that default
-# (see etckeeper README "This choice [git] has been carefully made").
-- name: Supported OS - Debian or Fedora
-  assert:
-    that: ansible_distribution in ["Debian", "Fedora"]
-
 # On debian, installing the etckeeper package seems to put /etc under version control
 # immediately.
 # Other distributions have a different philosophy though.
@@ -28,12 +21,16 @@
   check_mode: False
 
 
-# Avoid constant messages about setting user.email.
+# 1. git requires an "email address" for its commits.
+# 2. It will "autodetect", but only if hostname can be resolved to an FQDN.
+# 3. etckeeper provides an email address when sudo is used,
+#    or when etckeeper is run from a tty.
 #
-# This appeared necessary during initial testing with fedora-25 on nspawn.
-# I think it was required to avoid failures when committing from ansible.
-# It does not seem to be required on debian8-vm though.
+# This leaves us with a couple of cases where etckeeper will fail,
+# so we need to make sure to provide user.email in the git config.
 #
+# https://etckeeper.branchable.com/todo/requires___96__user.email__96___be_set_under_undocumented_circumstances/
+
 # 1/3 Query condition
 - name: query  | git user.email is set, at least for this repo
   environment:
