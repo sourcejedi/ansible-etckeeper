@@ -5,8 +5,8 @@ galaxy_info:
 
   license: GPLv3
 
-  # Ansible version without known vulnerabilities, according to debops project
-  min_ansible_version: 2.1.4.0
+  # check_mode
+  min_ansible_version: 2.2
 
   platforms:
     - name: Fedora

@@ -25,7 +25,7 @@
 - name: check  | etckeeper repo is created
   command: test -f /etc/.etckeeper
   changed_when: False
-  always_run: True
+  check_mode: False
 
 
 # Avoid constant messages about setting user.email.
@@ -43,7 +43,7 @@
   register: git_user_email
   failed_when: False
   changed_when: False
-  always_run: True
+  check_mode: False
 
 # 2/3 Run command task conditionally, to provide accurate "changed" status
 - name: ensure | git user.email is set, at least for this repo
@@ -59,7 +59,7 @@
   command: git config --get user.email
   register: git_user_email
   changed_when: False
-  always_run: True
+  check_mode: False
 
 
 # Save the original contents of /etc.
@@ -81,7 +81,7 @@
   register: etckeeper_has_commit
   failed_when: False
   changed_when: False
-  always_run: True
+  check_mode: False
 
 # 2/3 Run command task conditionally, to provide accurate "changed" status
 - name: ensure | etckeeper has initial commit
@@ -96,4 +96,4 @@
   args:
     warn: no  # can't use git module, it doesn't do anything like this
   changed_when: False
-  always_run: True
+  check_mode: False
