@@ -19,3 +19,10 @@ galaxy_info:
       versions:
         - all
 
+    # xenial is earliest tested version.
+    # (In some earlier version, they defaulted to bzr).
+    - name: Ubuntu
+      versions:
+        - xenial
+        - yaketty
+        - zesty
