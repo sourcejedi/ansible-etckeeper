@@ -1,7 +1,6 @@
-# On debian, installing the etckeeper package seems to put /etc under version control
-# immediately.
+# On debian, installing the etckeeper package seems to put /etc
+# under version control immediately.
 # Other distributions have a different philosophy though.
-# (Does this mean Ubuntu immediately creates a bzr repo??)
 - name: Install etckeeper
   package:
     name: etckeeper
@@ -22,8 +21,9 @@
 
 
 # 1. git requires an "email address" for its commits.
-# 2. It will "autodetect", but only if hostname can be resolved to an FQDN.
-# 3. etckeeper provides an email address when sudo is used,
+# 2. It will "autodetect", but only if hostname can be resolved to an FQDN,
+#    or a name has been provided in /etc/mailname.
+# 3. etckeeper provides an email address, but only when sudo is used,
 #    or when etckeeper is run from a tty.
 #
 # This leaves us with a couple of cases where etckeeper will fail,
@@ -36,7 +36,6 @@
   environment:
     GIT_DIR: /etc/.git
   command: git config --get user.email
-  args:
   register: git_user_email
   failed_when: False
   changed_when: False
@@ -46,7 +45,7 @@
 - name: ensure | git user.email is set, at least for this repo
   environment:
     GIT_DIR: /etc/.git
-  command: "git config --local user.email root@{{ ansible_hostname }}"
+  command: git config --local user.email root@{{ ansible_hostname }}
   when: git_user_email.rc != 0
 
 # 3/3 The condition must now hold.  This "fixes" ansible check mode.
@@ -64,9 +63,8 @@
 #
 # After this first commit, I don't care about integration with ansible.
 # There's no way to run after the play is complete, even if we wanted to.
-# Don't force a pre-commit either.  User can always untangle changes, but
-# once it's committed, it could be a bad idea to try moving back
-# in the history in /etc.
+# (However you could create another role, etckeeper-commit, to wrap
+#  your other roles with).
 #
 # 1/3 Query condition
 - name: query  | etckeeper has initial commit
