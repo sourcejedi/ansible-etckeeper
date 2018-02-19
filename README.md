@@ -18,7 +18,9 @@ If you run check mode when etckeeper is not fully installed, the play will fail.
 
 ## Requirements
 
-Used sucessfully on Fedora, Debian, and Ubuntu 16.04+.  I imagine most Linux distributions will provide an etckeeper package that works fine with this role.
+Used sucessfully on Fedora, Centos, Debian, and Ubuntu 16.04+.  I imagine most Linux distributions will provide an etckeeper package that works fine with this role.
+
+**Under Centos the EPEL repo will be added**
 
 Some older version of Ubuntu won't work, because their packaging changed the default backend to `bzr`, instead of `git`.  Etckeeper recommends against this - the backend should be `git`, unless the user has a strong preference for something else.  This role is implemented for `git` specifically (see below).  I might accept minimal pull requests for alternatives.
 
