@@ -1,6 +1,12 @@
 # On debian, installing the etckeeper package seems to put /etc
 # under version control immediately.
 # Other distributions have a different philosophy though.
+- name: Install epel repo (needed for Centos)
+  yum:
+   name: epel-release
+   state: present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
 - name: Install etckeeper
   package:
     name: etckeeper
