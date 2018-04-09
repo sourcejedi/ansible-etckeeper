@@ -46,6 +46,8 @@
   failed_when: False
   changed_when: False
   check_mode: False
+  tags:
+    - skip_ansible_lint #prevent ansible lint from complaining about this task
 
 # 2/3 Run command task conditionally, to provide accurate "changed" status
 - name: ensure | git user.email is set, at least for this repo
@@ -53,6 +55,8 @@
     GIT_DIR: /etc/.git
   command: git config --local user.email root@{{ ansible_hostname }}
   when: git_user_email.rc != 0
+  tags:
+    - skip_ansible_lint #prevent ansible lint from complaining about this task
 
 # 3/3 The condition must now hold.  This "fixes" ansible check mode.
 - name: check  | git user.email is set, at least for this repo
@@ -62,7 +66,8 @@
   register: git_user_email
   changed_when: False
   check_mode: False
-
+  tags:
+    - skip_ansible_lint #prevent ansible lint from complaining about this task
 
 # Save the original contents of /etc.
 # Same idea that justifies etckeeper automatic commits after package install.
