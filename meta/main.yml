@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: etckeeper
   author: Alan Jenkins
   description: Install etckeeper.  Track the contents of /etc
                using a version control system.
