@@ -4,6 +4,10 @@ Install etckeeper.  Track the contents of /etc using a version control system.
 
 The current contents of `/etc` is recorded in a Git repository.  Etckeeper creates new commits to the repository at daily intervals, and also when files are created or altered by the package manager.
 
+## Known issues
+
+For systems that use dnf, e.g. Fedora: the etckeeper-dnf plugin causes the Ansible dnf module to fail.  This happens when etckeeper saves uncommitted changes.  I have submitted a fix, and hopefully it will be accepted for etckeeper 1.18.11.  As a workaround, you can simply retry.  Unfortunately it could require several retries, to get all the way through your playbook.
+
 ## Status
 
 This particular role was written to work on an existing system.  It has been tested to work regardless of whether
@@ -26,7 +30,7 @@ Some older version of Ubuntu won't work, because their packaging changed the def
 
 ## Dependencies
 
-`user.email` is set automatically for the git repository.  This is required by git, and etckeeper fails to provide a value for it [in some cases](https://etckeeper.branchable.com/todo/requires___96__user.email__96___be_set_under_undocumented_circumstances/).  I did not include a role variable to change exactly what value is used.  However if `user.email` is already set (e.g. in `/root/.gitconfig`), this step is skipped.  So if you care what value is used, make sure your `/root/.gitconfig` is set up in advance.  (Or send me an issue / pull request, to explain why you want a role variable).
+`user.email` is set automatically for the git repository.  This is required by git, and older versions of etckeeper fail to provide a value for it [in some cases](https://etckeeper.branchable.com/todo/requires___96__user.email__96___be_set_under_undocumented_circumstances/).  I did not include a role variable to change exactly what value is used.  However if `user.email` is already set (e.g. in `/root/.gitconfig`), this step is skipped.  So if you care what value is used, make sure your `/root/.gitconfig` is set up in advance.  (Or send me an issue / pull request, to explain why you want a role variable).
 
 
 ## License

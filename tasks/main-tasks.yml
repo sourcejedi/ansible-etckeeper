@@ -1,12 +1,12 @@
-# On debian, installing the etckeeper package seems to put /etc
-# under version control immediately.
-# Other distributions have a different philosophy though.
-- name: Install epel repo (needed for Centos)
+- name: CentOS - Install EPEL repo
   package:
    name: epel-release
    state: present
   when: ansible_distribution == 'CentOS'
 
+# On debian, installing the etckeeper package seems to put /etc
+# under version control immediately.
+# Other distributions have a different philosophy though.
 - name: Install etckeeper
   package:
     name: etckeeper
@@ -29,8 +29,8 @@
 # 1. git requires an "email address" for its commits.
 # 2. It will "autodetect", but only if hostname can be resolved to an FQDN,
 #    or a name has been provided in /etc/mailname.
-# 3. etckeeper provides an email address, but only when sudo is used,
-#    or when etckeeper is run from a tty.
+# 3. etckeeper provides an email address, but in older versions it only does
+#    this when sudo is used, or when etckeeper is run from a tty.
 #
 # This leaves us with a couple of cases where etckeeper will fail,
 # so we need to make sure to provide user.email in the git config.
