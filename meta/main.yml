@@ -16,9 +16,6 @@ galaxy_info:
     - name: Debian
       versions:
         - all
-    - name: CentOS
-      versions:
-        - all
 
     # xenial is earliest tested version.
     # (In some earlier version, they defaulted to bzr).
