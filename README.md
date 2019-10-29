@@ -18,7 +18,7 @@ This particular role was written to work on an existing system.  It has been tes
 
 Ansible `--check` mode is supported.
 
-If you run check mode when etckeeper is not fully installed, the play will fail.  This behaviour is expected, as a complex role where some tasks depend on earlier ones.  We take care to produce this behaviour, making sure that check mode doesn't skip certain types of task and then give a [misleading report of "changed=0"](https://stackoverflow.com/questions/42602154/idioms-for-using-the-command-module).
+If you run check mode when etckeeper is not fully installed, the play will fail.  This behaviour is expected, as a complex role where some tasks depend on earlier ones.  We take care to produce this behaviour, making sure that check mode doesn't skip certain types of task and then give a misleading report of "changed=0".
 
 ## Requirements
 
