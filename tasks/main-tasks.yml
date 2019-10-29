@@ -12,6 +12,11 @@
     name: etckeeper
     state: present
 
+# See https://github.com/ansible/ansible/issues/54949
+- name: Remove etckeeper-dnf (it breaks Ansible)
+  package:
+    name: etckeeper-dnf
+    state: absent
 
 # 1/2 Run command task conditionally, to provide accurate "changed" status
 - name: ensure | etckeeper repo is created
