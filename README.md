@@ -6,7 +6,7 @@ The current contents of `/etc` is recorded in a Git repository.  Etckeeper creat
 
 ## Known issues
 
-This role removes etckeeper-dnf, as a workaround.  For systems that use dnf, e.g. Fedora, the etckeeper-dnf plugin was causing the Ansible dnf module to fail.  This happens when etckeeper saves uncommitted changes.  I have submitted a fix, and hopefully it will be accepted for etckeeper 1.18.11.
+For systems that use dnf, e.g. Fedora: the etckeeper-dnf plugin causes the Ansible dnf module to fail.  This happens when etckeeper saves uncommitted changes.  I have submitted a fix, and hopefully it will be accepted for etckeeper 1.18.11.  As a workaround, you can simply retry.  Unfortunately it could require several retries, to get all the way through your playbook.
 
 ## Status
 
