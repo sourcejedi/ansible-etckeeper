@@ -2,11 +2,7 @@
 
 Install etckeeper.  Track the contents of /etc using a version control system.
 
-The current contents of `/etc` is recorded in a Git repository.  Etckeeper creates new commits to the repository at daily intervals, and also when files are created or altered by the package manager.
-
-## Known issues
-
-For systems that use dnf, e.g. Fedora: the etckeeper-dnf plugin causes the Ansible dnf module to fail.  This happens when etckeeper saves uncommitted changes.  I have submitted a fix, and hopefully it will be accepted for etckeeper 1.18.11.  As a workaround, you can simply retry.  Unfortunately it could require several retries, to get all the way through your playbook.
+The current contents of `/etc` is recorded in a Git repository.  Etckeeper creates new commits to the repository at daily intervals, and also when files are created or altered by the package manager (if supported).
 
 ## Status
 
