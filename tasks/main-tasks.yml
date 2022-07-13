@@ -1,8 +1,8 @@
-- name: CentOS - Install EPEL repo
+- name: CentOS or Rocky - Install EPEL repo
   package:
    name: epel-release
    state: present
-  when: ansible_distribution == 'CentOS'
+  when: (ansible_distribution == 'CentOS') or (ansible_distribution == 'Rocky')
 
 # On debian, installing the etckeeper package seems to put /etc
 # under version control immediately.
