@@ -1,8 +1,13 @@
-- name: CentOS - Install EPEL repo
+# For RockyLinux, also need to enable the Powertools repo with "dnf
+# config-manager --set-enabled powertools".
+# etckeeper do not seem to need anything from the Powertools repo but keep
+# that in mind for proper EPEL repo activation, per
+# https://docs.fedoraproject.org/en-US/epel/#_quickstart
+- name: CentOS or Rocky - Install EPEL repo
   package:
    name: epel-release
    state: present
-  when: ansible_distribution == 'CentOS'
+  when: (ansible_distribution == 'CentOS') or (ansible_distribution == 'Rocky')
 
 # On debian, installing the etckeeper package seems to put /etc
 # under version control immediately.
