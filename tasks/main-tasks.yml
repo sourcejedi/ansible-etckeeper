@@ -82,8 +82,6 @@
   environment:
     GIT_DIR: /etc/.git
   command: git rev-parse HEAD
-  args:
-    warn: no  # can't use git module, it doesn't do anything like this
   register: etckeeper_has_commit
   failed_when: False
   changed_when: False
@@ -99,7 +97,5 @@
   environment:
     GIT_DIR: /etc/.git
   command: git rev-parse HEAD
-  args:
-    warn: no  # can't use git module, it doesn't do anything like this
   changed_when: False
   check_mode: False
