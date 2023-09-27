@@ -3,11 +3,11 @@
 # etckeeper do not seem to need anything from the Powertools repo but keep
 # that in mind for proper EPEL repo activation, per
 # https://docs.fedoraproject.org/en-US/epel/#_quickstart
-- name: CentOS or Rocky - Install EPEL repo
+- name: CentOS, Rocky or AlmaLinux - Install EPEL repo
   package:
    name: epel-release
    state: present
-  when: (ansible_distribution == 'CentOS') or (ansible_distribution == 'Rocky')
+  when: ansible_distribution in ['CentOS', 'Rocky', 'AlmaLinux']
 
 # On debian, installing the etckeeper package seems to put /etc
 # under version control immediately.
